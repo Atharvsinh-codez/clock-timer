@@ -2,11 +2,13 @@ import { create } from 'zustand'
 
 export type Mode = 'clock' | 'timer' | 'stopwatch';
 
-export const MIN_DURATION = 60;        // 1 minute
-export const MAX_DURATION = 24 * 3600; // 24 hours
+export const TIMER_MIN_DURATION = 60; // 1 minute
+export const STOPWATCH_MIN_DURATION = 60; // 1 minute
+export const CLOCK_CYCLE_MIN_DURATION = 10 * 60; // 10 minutes
+export const MAX_DURATION = 99 * 3600 + 59 * 60 + 59; // 99:59:59, matching the wheels
 
-const clampDuration = (seconds: number) =>
-  Math.max(MIN_DURATION, Math.min(MAX_DURATION, Math.round(seconds)));
+const clampDuration = (seconds: number, minSeconds: number) =>
+  Math.max(minSeconds, Math.min(MAX_DURATION, Math.round(seconds)));
 
 interface TimeStore {
   time: Date;
@@ -18,7 +20,7 @@ interface TimeStore {
   mode: Mode;
   setMode: (mode: Mode) => void;
 
-  // user config, all in seconds, clamped [MIN_DURATION, MAX_DURATION]
+  // user config, all in seconds, clamped to each mode's allowed range
   clockCycleSeconds: number;
   timerDurationSeconds: number;
   stopwatchTargetSeconds: number;
@@ -32,6 +34,10 @@ interface TimeStore {
   start: () => void;
   pause: () => void;
   reset: () => void;
+
+  // theater mode: fullscreen with all UI hidden except digits and menu on hover
+  theaterMode: boolean;
+  setTheaterMode: (enabled: boolean) => void;
 }
 
 export const useTimeStore = create<TimeStore>((set) => {
@@ -56,11 +62,20 @@ export const useTimeStore = create<TimeStore>((set) => {
     clockCycleSeconds: 3600,
     timerDurationSeconds: 300,
     stopwatchTargetSeconds: 300,
-    setClockCycleSeconds: (seconds) => set({ clockCycleSeconds: clampDuration(seconds) }),
+    setClockCycleSeconds: (seconds) =>
+      set({ clockCycleSeconds: clampDuration(seconds, CLOCK_CYCLE_MIN_DURATION) }),
     setTimerDurationSeconds: (seconds) =>
-      set({ timerDurationSeconds: clampDuration(seconds), runningSince: null, accumulatedMs: 0 }),
+      set({
+        timerDurationSeconds: clampDuration(seconds, TIMER_MIN_DURATION),
+        runningSince: null,
+        accumulatedMs: 0,
+      }),
     setStopwatchTargetSeconds: (seconds) =>
-      set({ stopwatchTargetSeconds: clampDuration(seconds), runningSince: null, accumulatedMs: 0 }),
+      set({
+        stopwatchTargetSeconds: clampDuration(seconds, STOPWATCH_MIN_DURATION),
+        runningSince: null,
+        accumulatedMs: 0,
+      }),
 
     runningSince: null,
     accumulatedMs: 0,
@@ -74,6 +89,9 @@ export const useTimeStore = create<TimeStore>((set) => {
             accumulatedMs: state.accumulatedMs + (Date.now() - state.runningSince),
           }),
     reset: () => set({ runningSince: null, accumulatedMs: 0 }),
+
+    theaterMode: false,
+    setTheaterMode: (enabled) => set({ theaterMode: enabled }),
   };
 });
 

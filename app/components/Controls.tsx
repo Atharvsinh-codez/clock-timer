@@ -5,7 +5,12 @@ import Image from 'next/image';
 import { useState } from 'react';
 import Magnet from './Magnet';
 import { DurationModal } from './DurationModal';
-import { useTimeStore } from '../stores/timeStore';
+import {
+  CLOCK_CYCLE_MIN_DURATION,
+  STOPWATCH_MIN_DURATION,
+  TIMER_MIN_DURATION,
+  useTimeStore,
+} from '../stores/timeStore';
 
 /** Bottom-left controls: clock-cycle editor, or timer/stopwatch transport + duration setup. */
 export const Controls = () => {
@@ -47,7 +52,7 @@ export const Controls = () => {
           open={editOpen}
           title="Bar Cycle"
           initialSeconds={clockCycleSeconds}
-          showSeconds={false}
+          minSeconds={CLOCK_CYCLE_MIN_DURATION}
           onClose={() => setEditOpen(false)}
           onSave={setClockCycleSeconds}
         />
@@ -73,7 +78,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={start}
-              className="btn-accent rounded-full px-7 py-2.5 text-sm font-semibold text-black transition-[filter] duration-200 hover:brightness-110"
+              className="btn-accent rounded-full px-7 py-2.5 text-sm text-black transition-[filter] duration-200 hover:brightness-110"
             >
               {dirty ? 'Resume' : 'Start'}
             </motion.button>
@@ -86,7 +91,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={pause}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm font-medium text-white transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white transition-[filter] duration-200 hover:brightness-125"
             >
               Pause
             </motion.button>
@@ -101,7 +106,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={reset}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm font-medium text-white/75 transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125"
             >
               Reset
             </motion.button>
@@ -116,7 +121,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={() => setEditOpen(true)}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm font-medium text-white/75 transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125"
             >
               Set duration
             </motion.button>
@@ -128,6 +133,7 @@ export const Controls = () => {
         open={editOpen}
         title={isTimer ? 'Timer Duration' : 'Stopwatch Target'}
         initialSeconds={setupSeconds}
+        minSeconds={isTimer ? TIMER_MIN_DURATION : STOPWATCH_MIN_DURATION}
         onClose={() => setEditOpen(false)}
         onSave={setSetup}
       />

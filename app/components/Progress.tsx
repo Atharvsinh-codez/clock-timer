@@ -62,17 +62,17 @@ export const Progress = ({
     // Cap the cascade so fast cycles (e.g. 1-min) don't queue delays longer than a tick.
     const staggerStep = Math.min(0.03, secondsPerCell / cells);
     const activeDuration = Math.max(0.1, cellRemainingRef.current);
-    // A cell coming IN eases in slowly; a cell going OUT snaps away fast.
+    // Ultra-smooth easing curves for buttery animations
     const COME_EASE = [0.22, 1, 0.36, 1] as const; // gentle settle
-    const GO_EASE = [0.4, 0, 1, 1] as const;        // quick exit
-    const GO_DURATION = 0.28;
+    const GO_EASE = [0.33, 1, 0.68, 1] as const; // ultra-smooth fluid exit
+    const GO_DURATION = 0.8; // slower, more elegant
 
     [...scope.current.children].forEach((child, index) => {
       if (direction === 'drain') {
         if (index < activeIndex) {
           animate(child, FULL, { duration: 0.9, delay: (cells - 1 - index) * staggerStep, ease: COME_EASE });
         } else if (index === activeIndex) {
-          // Active cell is leaving (drain) — fast, but never longer than its time slice.
+          // Active cell is leaving (drain) — smooth now, paced to time slice.
           animate(child, EMPTY, { duration: Math.min(GO_DURATION, activeDuration), ease: GO_EASE });
         } else {
           animate(child, EMPTY, { duration: GO_DURATION, delay: (cells - 1 - index) * staggerStep, ease: GO_EASE });

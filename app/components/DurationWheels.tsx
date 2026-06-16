@@ -59,7 +59,10 @@ const Wheel = ({ label, max, value, onChange }: WheelProps) => {
       if (Math.abs(el.scrollTop - snapTop) > 0.5) {
         el.scrollTo({ top: snapTop, behavior: 'smooth' });
       }
-      if (idx !== valueRef.current) onChange(idx);
+      if (idx !== valueRef.current) {
+        valueRef.current = idx;
+        onChange(idx);
+      }
     }, 110);
   };
 
@@ -86,9 +89,13 @@ const Wheel = ({ label, max, value, onChange }: WheelProps) => {
             type="button"
             data-row="1"
             onClick={() => {
+              if (n !== valueRef.current) {
+                valueRef.current = n;
+                onChange(n);
+              }
               ref.current?.scrollTo({ top: n * ITEM_HEIGHT, behavior: 'smooth' });
             }}
-            className="flex w-full items-center justify-center font-semibold tabular-nums text-white"
+            className="flex w-full items-center justify-center tabular-nums text-white"
             style={{
               height: ITEM_HEIGHT,
               fontSize: 30,
@@ -102,7 +109,7 @@ const Wheel = ({ label, max, value, onChange }: WheelProps) => {
         ))}
         <div style={{ height: ITEM_HEIGHT * PAD }} />
       </div>
-      <span className="mt-2 text-[11px] font-medium uppercase tracking-[0.2em] text-emerald-400/70">
+      <span className="mt-2 text-[11px] uppercase tracking-[0.2em] text-emerald-400/70">
         {label}
       </span>
     </div>
@@ -136,7 +143,7 @@ export const DurationWheels = ({ initialValue, onChange, showSeconds = true }: D
         className="pointer-events-none absolute inset-x-0 z-10 border-y border-white/15"
         style={{ height: ITEM_HEIGHT, top: ITEM_HEIGHT * PAD }}
       />
-      <Wheel label="hr" max={24} value={hms.current.h} onChange={(h) => { hms.current.h = h; emit(); }} />
+      <Wheel label="hr" max={99} value={hms.current.h} onChange={(h) => { hms.current.h = h; emit(); }} />
       <Wheel label="min" max={59} value={hms.current.m} onChange={(m) => { hms.current.m = m; emit(); }} />
       {showSeconds && (
         <Wheel label="sec" max={59} value={hms.current.s} onChange={(s) => { hms.current.s = s; emit(); }} />
