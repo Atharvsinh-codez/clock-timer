@@ -67,7 +67,7 @@ export const Controls = () => {
 
   return (
     <>
-      <div className="absolute bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-3">
+      <div className="absolute bottom-16 left-1/2 z-30 flex -translate-x-1/2 flex-nowrap items-center gap-2 sm:bottom-10 sm:gap-3">
         <AnimatePresence mode="popLayout">
           {!running ? (
             <motion.button
@@ -78,7 +78,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={start}
-              className="btn-accent rounded-full px-7 py-2.5 text-sm text-black transition-[filter] duration-200 hover:brightness-110"
+              className="btn-accent shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-black transition-[filter] duration-200 hover:brightness-110 sm:px-7"
             >
               {dirty ? 'Resume' : 'Start'}
             </motion.button>
@@ -91,7 +91,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={pause}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-white transition-[filter] duration-200 hover:brightness-125 sm:px-7"
             >
               Pause
             </motion.button>
@@ -106,7 +106,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={reset}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125 sm:px-7"
             >
               Reset
             </motion.button>
@@ -121,7 +121,7 @@ export const Controls = () => {
               exit={{ opacity: 0, scale: 0.8 }}
               whileTap={{ scale: 0.92 }}
               onClick={() => setEditOpen(true)}
-              className="btn-glass rounded-full px-7 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125"
+              className="btn-glass shrink-0 whitespace-nowrap rounded-full px-5 py-2.5 text-sm text-white/75 transition-[filter] duration-200 hover:brightness-125 sm:px-7"
             >
               Set duration
             </motion.button>
