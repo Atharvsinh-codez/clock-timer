@@ -16,6 +16,12 @@ const ogImage = {
   height: 2560,
   alt: "TimeX visual clock, timer, and stopwatch interface",
 };
+const twitterImage = {
+  url: "/twitter-image-TimeX.jpg",
+  width: 1200,
+  height: 600,
+  alt: ogImage.alt,
+};
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -67,7 +73,7 @@ export const metadata: Metadata = {
     description: siteDescription,
     site: "@athrix_codes",
     creator: "@athrix_codes",
-    images: [ogImage],
+    images: [twitterImage],
   },
   other: {
     "author:portfolio": authorUrl,

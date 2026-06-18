@@ -59,8 +59,8 @@ export const Time = () => {
   useEffect(() => {
     function handleResize() {
       const sizeDesktop = Math.max(30, Math.min(window.innerWidth* 0.15, 156));
-      const sizeMobile = Math.max(20, Math.min(window.innerWidth * 0.1, 30));
-      setFontSize(isMobile ? sizeMobile : sizeDesktop);
+      const sizeMobile = Math.max(52, Math.min(window.innerWidth * 0.17, 68));
+      setFontSize(isMobile || window.innerWidth < 640 ? sizeMobile : sizeDesktop);
     }
     handleResize();
     window.addEventListener('resize', handleResize);
