@@ -121,15 +121,22 @@ interface DurationWheelsProps {
   initialValue: number;
   /** reports the latest total seconds; does not need to feed back into `initialValue` */
   onChange: (totalSeconds: number) => void;
-  /** show the seconds wheel (default true). Bar Cycle hides it — hr/min only. */
+  /** inclusive max value for the hour wheel */
+  maxHours?: number;
+  /** show the seconds wheel (default true) */
   showSeconds?: boolean;
 }
 
-export const DurationWheels = ({ initialValue, onChange, showSeconds = true }: DurationWheelsProps) => {
+export const DurationWheels = ({
+  initialValue,
+  onChange,
+  maxHours = 99,
+  showSeconds = true,
+}: DurationWheelsProps) => {
   // Uncontrolled: the wheels own their position. We keep h/m/s in refs and report
   // the combined total up on every change, without re-rendering this component.
   const hms = useRef({
-    h: Math.floor(initialValue / 3600),
+    h: Math.min(maxHours, Math.floor(initialValue / 3600)),
     m: Math.floor((initialValue % 3600) / 60),
     s: showSeconds ? initialValue % 60 : 0,
   });
@@ -143,7 +150,7 @@ export const DurationWheels = ({ initialValue, onChange, showSeconds = true }: D
         className="pointer-events-none absolute inset-x-0 z-10 border-y border-white/15"
         style={{ height: ITEM_HEIGHT, top: ITEM_HEIGHT * PAD }}
       />
-      <Wheel label="hr" max={99} value={hms.current.h} onChange={(h) => { hms.current.h = h; emit(); }} />
+      <Wheel label="hr" max={maxHours} value={hms.current.h} onChange={(h) => { hms.current.h = h; emit(); }} />
       <Wheel label="min" max={59} value={hms.current.m} onChange={(m) => { hms.current.m = m; emit(); }} />
       {showSeconds && (
         <Wheel label="sec" max={59} value={hms.current.s} onChange={(s) => { hms.current.s = s; emit(); }} />

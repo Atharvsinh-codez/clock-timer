@@ -53,6 +53,7 @@ export const Controls = () => {
           title="Bar Cycle"
           initialSeconds={clockCycleSeconds}
           minSeconds={CLOCK_CYCLE_MIN_DURATION}
+          maxHours={24}
           onClose={() => setEditOpen(false)}
           onSave={setClockCycleSeconds}
         />

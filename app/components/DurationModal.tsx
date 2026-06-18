@@ -11,6 +11,7 @@ interface DurationModalProps {
   onClose: () => void;
   onSave: (seconds: number) => void;
   minSeconds: number;
+  maxHours?: number;
   /** show the seconds wheel (default true) */
   showSeconds?: boolean;
 }
@@ -23,6 +24,7 @@ export const DurationModal = ({
   title,
   initialSeconds,
   minSeconds,
+  maxHours,
   onClose,
   onSave,
   showSeconds = true,
@@ -62,6 +64,7 @@ export const DurationModal = ({
         {open && (
           <DurationWheels
             initialValue={clamp(initialSeconds, minSeconds, MAX_DURATION)}
+            maxHours={maxHours}
             showSeconds={showSeconds}
             onChange={(v) => {
               draftRef.current = v;
